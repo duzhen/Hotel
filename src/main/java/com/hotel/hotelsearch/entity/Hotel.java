@@ -16,10 +16,14 @@ public class Hotel {
     @XmlTransient
     private Long id;
 
+//    @Pattern(regexp = "[a-zA-Z ]{5,45}", message = "illegal name")
     private String name;
 
+//    @Pattern(regexp = "[a-zA-Z ]{5,45}", message = "illegal city")
     private String city;
     
+//    @Pattern(regexp = "[a-zA-Z ]{5,45}", message = "illegal country")
+//    @Pattern(regexp = "[Argentina|Brazil|Canada]", message = "illegal country")
     private String country;
 
 	public Long getId() {

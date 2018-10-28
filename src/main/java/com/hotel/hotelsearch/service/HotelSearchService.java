@@ -2,13 +2,17 @@ package com.hotel.hotelsearch.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hotel.hotelsearch.ParamConflictException;
+import com.hotel.hotelsearch.ParamException;
 import com.hotel.hotelsearch.entity.Hotel;
 import com.hotel.hotelsearch.mapper.HotelSearchMapper;
 
@@ -20,11 +24,18 @@ public class HotelSearchService {
 	@Autowired
 	private HotelSearchMapper hotelMapper;
 
-	public Hotel add(String name, String city, String country) {
+	public Hotel add(String name, String city, String country) throws ParamException {
+		if(!Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(name).orElse("")) || !Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(city).orElse("")) 
+				|| !Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(country).orElse(""))) {
+			throw new ParamException("illegal parameter");
+		}
+		if(!Pattern.matches("argentina|brazil|canada", Optional.ofNullable(country).orElse("").toLowerCase())) {
+			throw new ParamConflictException("conflict country");
+		}
 		Hotel h = new Hotel();
-		h.setName(name);
-		h.setCity(city);
-		h.setCountry(country);
+		h.setName(WordUtils.capitalize(name.toLowerCase()));
+		h.setCity(WordUtils.capitalize(city.toLowerCase()));
+		h.setCountry(WordUtils.capitalize(country.toLowerCase()));
 		hotelMapper.addHotel(h);
 		return h;
 	}
