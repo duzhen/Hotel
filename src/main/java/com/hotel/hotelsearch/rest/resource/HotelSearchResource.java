@@ -35,7 +35,7 @@ public class HotelSearchResource {
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchHotel(@QueryParam("city") String city, @QueryParam("country") String country) {
-		List<Hotel> hotels = hotelSearchService.search("%"+city+"%", "%"+country+"%");
+		List<Hotel> hotels = hotelSearchService.search(city, country);
 		Result result = new Result(hotels);
 				
 		return Response.ok().entity(result).build();
