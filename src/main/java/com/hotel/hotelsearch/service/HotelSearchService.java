@@ -1,5 +1,6 @@
 package com.hotel.hotelsearch.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -24,8 +25,15 @@ public class HotelSearchService {
 	@Autowired
 	private HotelSearchMapper hotelMapper;
 
+	/**
+	 * <p>This method is used for add hotel
+	 * </p>
+	 * @param  name, city, country
+	 * @return new Hotel added
+	 */
 	public Hotel add(String name, String city, String country) throws ParamException {
-		if(!Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(name).orElse("")) || !Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(city).orElse("")) 
+		if(!Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(name).orElse("")) 
+				|| !Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(city).orElse("")) 
 				|| !Pattern.matches("[a-zA-Z ]{1,45}", Optional.ofNullable(country).orElse(""))) {
 			throw new ParamException("illegal parameter");
 		}
@@ -40,30 +48,39 @@ public class HotelSearchService {
 		return h;
 	}
 
+	/**
+	 * <p>This method is used for search hotel
+	 * </p>
+	 * @param  city, country
+	 * @return Hotel list
+	 */
 	public List<Hotel> search(String city, String country) {
 		logger.info("city: "+city+" country: "+country);
 		if(Optional.ofNullable(city).isPresent()) {
-			city = "%"+city+"%";
+			city = city+"%";
 		} else {
 			city = "%";
 		}
 		if(Optional.ofNullable(country).isPresent()) {
-			country = "%"+country+"%";
+			country = country+"%";
 		} else {
 			country = "%";
 		}
 		logger.info("after update city: "+city+" country: "+country);
-		
-		List<Hotel> hotels = hotelMapper.findHotel(city, country);
-
-		return hotels.stream().sorted((Hotel arg0, Hotel arg1) -> {
-			int name = arg0.getName().compareTo(arg1.getName());
-			if (name == 0) {
-				return arg0.getCity().compareTo(arg1.getCity());
-			} else {
-				return name;
-			}
-		}).collect(Collectors.toList());
-
+		try {
+			List<Hotel> hotels = hotelMapper.findHotel(city, country);
+	
+			return hotels.stream().sorted((Hotel arg0, Hotel arg1) -> {
+				int name = arg0.getName().compareTo(arg1.getName());
+				if (name == 0) {
+					return arg0.getCity().compareTo(arg1.getCity());
+				} else {
+					return name;
+				}
+			}).collect(Collectors.toList());
+		} catch(Exception e) {
+			logger.info(e.getCause().getMessage());
+			return new ArrayList<Hotel>();
+		}
 	}
 }

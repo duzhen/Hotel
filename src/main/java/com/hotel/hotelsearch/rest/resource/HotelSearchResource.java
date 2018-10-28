@@ -87,6 +87,8 @@ public class HotelSearchResource {
 			return Response.status(Status.BAD_REQUEST)
 					.entity(new APIError(Status.BAD_REQUEST.getStatusCode(), Status.BAD_REQUEST.getReasonPhrase()))
 					.build();
+		} catch (Exception e) {
+			logger.info(e.getCause().getMessage());
 		}
 		return Response.status(Status.BAD_REQUEST)
 				.entity(new APIError(Status.BAD_REQUEST.getStatusCode(), Status.BAD_REQUEST.getReasonPhrase())).build();

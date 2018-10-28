@@ -72,8 +72,9 @@ public class HotelSearchServiceUnitTest {
 	
 	@Test
 	public void testSearchHotelInOrder() {
-		hotelSearchService.add("AHotel", "Buenos Aires", "Argentina");
 		hotelSearchService.add("bHotel", "Buenos Aires", "Argentina");
+		hotelSearchService.add("AHotel", "Buenos AiresZ", "Argentina");
+		hotelSearchService.add("AHotel", "Buenos AiresA", "Argentina");
 		List<Hotel> hotels = hotelSearchService.search("Buenos Aires", "Argentina");
 		hotels.forEach(System.out::println);
 		boolean order = true;
