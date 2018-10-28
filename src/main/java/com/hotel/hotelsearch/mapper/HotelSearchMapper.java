@@ -12,7 +12,7 @@ import com.hotel.hotelsearch.entity.Hotel;
 
 @Mapper
 public interface HotelSearchMapper {
-	@Select(value = "SELECT * FROM hotel WHERE city LIKE #{city} and country LIKE #{country} ORDER BY name, city")
+	@Select(value = "SELECT * FROM hotel WHERE city LIKE #{city} and country LIKE #{country}")
 	List<Hotel> findHotel(@Param("city") String city, @Param("country") String country);
 	
 	@Options(useGeneratedKeys = true, keyProperty = "id")

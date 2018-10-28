@@ -22,7 +22,7 @@ public class HotelSearchMapperUnitTest {
 	@Test
 	public void testAddHotel() {
 		Hotel hotel = new Hotel();
-		hotel.setName("1Hotel");
+		hotel.setName("Hotel");
 		hotel.setCity("Buenos Aires");
 		hotel.setCountry("Argentina");
 		int id = hotelMapper.addHotel(hotel);
