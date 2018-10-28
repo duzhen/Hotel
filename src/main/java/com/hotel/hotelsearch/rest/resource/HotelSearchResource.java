@@ -2,6 +2,7 @@ package com.hotel.hotelsearch.rest.resource;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,7 +22,7 @@ import com.hotel.hotelsearch.entity.Hotel;
 import com.hotel.hotelsearch.service.HotelSearchService;
 
 @Component
-@Path("/rest")
+@Path("rest")
 public class HotelSearchResource {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -31,9 +32,10 @@ public class HotelSearchResource {
 	
 	@GET
     @Path("search")
+	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCampsiteSchedule(@QueryParam("city") String city, @QueryParam("country") String country) {
-		List<Hotel> hotels = hotelSearchService.search(city, country);
+    public Response searchHotel(@QueryParam("city") String city, @QueryParam("country") String country) {
+		List<Hotel> hotels = hotelSearchService.search("%"+city+"%", "%"+country+"%");
 		Result result = new Result(hotels);
 				
 		return Response.ok().entity(result).build();
@@ -41,18 +43,29 @@ public class HotelSearchResource {
 
     @GET
     @Path("add")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBookingById(@QueryParam("name") String name, @QueryParam("city") String city, @QueryParam("country") String country) {
+    public Response addHotelGet(@QueryParam("name") String name, @QueryParam("city") String city, @QueryParam("country") String country) {
     	Hotel hotel = hotelSearchService.add(name, city, country);
     	return Response.ok().entity(hotel).build();
     }
 
     @POST
     @Path("add")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response booking(@FormParam("name") String name, @FormParam("city") String city,
+    public Response addHotel(@FormParam("name") String name, @FormParam("city") String city,
     		@FormParam("country") String country) {
     	Hotel hotel = hotelSearchService.add(name, city, country);
+    	return Response.ok().entity(hotel).build();
+    }
+    
+    @POST
+    @Path("add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addHotel(Hotel h) {
+    	Hotel hotel = hotelSearchService.add(h.getName(), h.getCity(), h.getCountry());
     	return Response.ok().entity(hotel).build();
     }
 }

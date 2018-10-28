@@ -1,4 +1,4 @@
-package com.hotel.hotelsearch.reporsitory;
+package com.hotel.hotelsearch.repository;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ import com.hotel.hotelsearch.entity.Hotel;
 
 public interface HotelRepository extends CrudRepository<Hotel, Long> {
 
-	@Query(value = "SELECT name,city,country FROM #{#entityName} WHERE city=:city and country=:country")
+	@Query(value = "SELECT name,city,country FROM #{#entityName} WHERE city LIKE :city and country LIKE :country ORDER BY name, city")
 	List<Hotel> findHotel(@Param("city") String city, @Param("country") String country);
 }
